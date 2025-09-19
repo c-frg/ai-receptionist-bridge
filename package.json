@@ -4,8 +4,7 @@
   "type": "module",
   "dependencies": {
     "express": "^4.19.2",
-    "ws": "^8.16.0",
-    "xmlbuilder2": "^4.0.2"
+    "ws": "^8.16.0"
   },
   "scripts": { "start": "node server.js" }
 }
