@@ -1,10 +1,8 @@
 import express from "express";
 import http from "http";
 import { WebSocketServer } from "ws";
-import { xml } from "xmlbuilder2";
 
-// Render will provide PORT; we’ll use it.
-const { OPENAI_API_KEY = "", PORT = 10000 } = process.env;
+const { PORT = 10000 } = process.env;
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -12,14 +10,13 @@ app.use(express.json());
 
 // Twilio webhook: return TwiML that starts a media stream to our WS
 app.post("/twilio/voice", (req, res) => {
-  const doc = xml({ version: "1.0", encoding: "UTF-8" })
-    .ele("Response")
-      .ele("Start")
-        .ele("Stream", { url: `wss://${req.headers.host}/twilio/media` }).up()
-      .up()
-      .ele("Pause", { length: "600" }).up()
-    .up();
-  res.type("text/xml").send(doc.end());
+  const twiml =
+    `<?xml version="1.0" encoding="UTF-8"?>` +
+    `<Response>` +
+      `<Start><Stream url="wss://${req.headers.host}/twilio/media"/></Start>` +
+      `<Pause length="600"/>` +
+    `</Response>`;
+  res.type("text/xml").send(twiml);
 });
 
 // WebSocket endpoint — Twilio streams audio here (scaffold for now)
@@ -28,7 +25,7 @@ const wss = new WebSocketServer({ server, path: "/twilio/media" });
 
 wss.on("connection", (twilioWS) => {
   console.log("Twilio media stream connected");
-  // Next step (later): open WS to OpenAI Realtime and relay audio
+  // Next step: open WS to OpenAI Realtime and relay audio frames.
   twilioWS.on("message", () => {});
   twilioWS.on("close", () => console.log("Twilio media stream closed"));
 });
