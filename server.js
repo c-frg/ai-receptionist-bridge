@@ -20,11 +20,14 @@ app.use(express.json());
 
 // 1) Twilio hits this when a call starts. We start a bidirectional media stream.
 app.post("/twilio/voice", (req, res) => {
+  const host = "ai-receptionist-bridge-ax4v.onrender.com"; // use your known host
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
+  <Say voice="alice">Connecting you to our assistant.</Say>
   <Start>
-    <Stream url="wss://${req.headers.host}/twilio/media"/>
+    <Stream url="wss://${host}/twilio/media" />
   </Start>
+  <Pause length="600"/>
 </Response>`;
   res.type("text/xml").send(twiml);
 });
