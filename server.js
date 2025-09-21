@@ -3,7 +3,7 @@ import express from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import { spawn } from "node:child_process";
 import ffmpegPath from "ffmpeg-static";
-import { randomUUID } from "uuid";
+import { randomUUID } from "node:crypto";
 
 // ====== CONFIG ======
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY; // set in Render
