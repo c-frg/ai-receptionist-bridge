@@ -190,14 +190,14 @@ wss.on("connection", (twilioWS) => {
     console.log("Connected to OpenAI Realtime");
     oaReady = true;
 
-    oaWS.send(JSON.stringify({
-      type: "session.update",
-      session: {
-        instructions: SYSTEM_PROMPT,
-        input_audio_format:  { type: "pcm16", sample_rate: 16000 },
-        output_audio_format: { type: "pcm16", sample_rate: 16000 }
-      }
-    }));
+  oaWS.send(JSON.stringify({
+  type: "session.update",
+  session: {
+    instructions: SYSTEM_PROMPT,
+    input_audio_format: "pcm16",
+    output_audio_format: "pcm16"
+  }
+}));
 
     // Flush any buffered caller audio, then request first response
     flushIfReady();
